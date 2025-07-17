@@ -353,9 +353,6 @@ wss.on("connection", (ws) => {
   })
 })
 
-const PORT = process.env.PORT || 3000
-server.listen(PORT, () => console.log(`${PORT} 포트에서 서버가 실행되었습니다. `))
-
 function checkOmokWin(board, x, y, player) {
   const directions = [
     [1, 0],
