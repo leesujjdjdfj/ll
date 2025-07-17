@@ -389,3 +389,41 @@ function checkOmokWin(board, x, y, player) {
   }
   return false
 }
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`서버가 포트 ${PORT}에서 실행 중입니다`);
+});
+
+function checkOmokWin(board, x, y, color) {
+  const directions = [
+    { dx: 1, dy: 0 },  // 가로
+    { dx: 0, dy: 1 },  // 세로
+    { dx: 1, dy: 1 },  // 대각 ↘
+    { dx: 1, dy: -1 }  // 대각 ↗
+  ];
+
+  for (const { dx, dy } of directions) {
+    let count = 1;
+
+    // 양 방향 탐색
+    for (let dir = -1; dir <= 1; dir += 2) {
+      let nx = x + dx * dir;
+      let ny = y + dy * dir;
+
+      while (
+        ny >= 0 && ny < board.length &&
+        nx >= 0 && nx < board[0].length &&
+        board[ny][nx] === color
+      ) {
+        count++;
+        nx += dx * dir;
+        ny += dy * dir;
+      }
+    }
+
+    if (count >= 5) return true;
+  }
+
+  return false;
+}
