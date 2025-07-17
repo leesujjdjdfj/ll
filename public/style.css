@@ -1464,6 +1464,46 @@ body.lose-effect {
 
 /* ===== 새로운 숫자야구 UI 스타일 끝 ===== */
 
+/* 싱글모드 전용 CSS 스타일을 제거하여 기존 UI 레이아웃을 유지: */
+
+/* 싱글모드 전용 스타일 제거 - 아래 코드들을 삭제 */
+/* 
+.baseball-ui.single-mode .stats-section {
+  display: none;
+}
+
+.baseball-ui.single-mode .baseball-content {
+  display: block;
+}
+
+.baseball-ui.single-mode .baseball-panel:first-child {
+  width: 100%;
+  max-width: none;
+}
+
+.baseball-ui.single-mode .baseball-panel:last-child {
+  display: none;
+}
+
+.baseball-ui.single-mode .guess-record {
+  max-height: 400px;
+}
+
+.baseball-ui.single-mode .game-info {
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .baseball-ui.single-mode .baseball-content {
+    flex-direction: column;
+  }
+
+  .baseball-ui.single-mode .baseball-panel:first-child {
+    width: 100%;
+  }
+}
+*/
+
 /* ===== 숫자야구 설정 페이지 스타일 ===== */
 .baseball-setup-body {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -2146,5 +2186,253 @@ body.lose-effect {
 
   .room-code-value {
     font-size: 1.8rem;
+  }
+}
+
+/* 싱글 플레이어 전용 스타일 */
+.baseball-ui.single-player {
+  /* 기본 레이아웃은 유지하되 싱글 플레이어에 특화된 스타일 적용 */
+}
+
+/* 남은 횟수 표시 스타일 */
+.remaining-attempts {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.remaining-attempts.warning {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+}
+
+.remaining-attempts.danger {
+  background: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+  box-shadow: 0 0 10px rgba(220, 53, 69, 0.3);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* 싱글 플레이어 모드에서 컨텐츠 영역 조정 */
+.baseball-ui .baseball-content.single-player {
+  display: block; /* 플렉스 대신 블록으로 변경 */
+}
+
+.baseball-ui .baseball-content.single-player .baseball-panel {
+  width: 100%;
+  max-width: none;
+  margin-bottom: 1rem;
+}
+
+/* 추측 기록 영역 확장 */
+.baseball-ui .single-player .guess-record {
+  max-height: 60vh; /* 화면 높이의 60%까지 확장 */
+  min-height: 300px;
+}
+
+/* 시스템 메시지 스타일 개선 */
+.system-chat {
+  background: #444 !important;
+  border-left: 4px solid #007bff;
+  font-weight: 500;
+}
+
+/* 추측 카드 스타일 개선 */
+.guess-card {
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.guess-card:hover {
+  transform: translateX(5px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.guess-card .round {
+  color: #1e90ff;
+  font-size: 0.9rem;
+}
+
+.guess-card .details {
+  font-size: 1rem;
+  margin-top: 0.3rem;
+}
+
+/* 게임 입력 영역 스타일 개선 */
+.baseball-game-input {
+  background: #111;
+  padding: 1rem;
+  border-top: 2px solid #444;
+}
+
+.baseball-game-input input {
+  font-size: 1.1rem;
+  padding: 0.8rem;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.baseball-game-input button {
+  font-size: 1rem;
+  padding: 0.8rem 1.5rem;
+  font-weight: 600;
+}
+
+/* 모바일 반응형 스타일 */
+@media (max-width: 768px) {
+  .baseball-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .game-info {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .remaining-attempts {
+    font-size: 1rem;
+    padding: 0.7rem 1.2rem;
+  }
+
+  .baseball-main {
+    padding: 0.3rem;
+  }
+
+  .baseball-panel {
+    padding: 0.8rem;
+  }
+
+  .baseball-panel h2 {
+    font-size: 1rem;
+  }
+
+  .guess-record {
+    max-height: 50vh;
+    min-height: 250px;
+  }
+
+  .guess-card {
+    padding: 0.6rem;
+  }
+
+  .guess-card .round {
+    font-size: 0.8rem;
+  }
+
+  .guess-card .details {
+    font-size: 0.9rem;
+  }
+
+  .chat-box {
+    max-height: 120px;
+  }
+
+  .chat-msg {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .baseball-game-input {
+    padding: 0.8rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .baseball-game-input input {
+    min-width: 200px;
+    font-size: 1rem;
+  }
+
+  .baseball-game-input button {
+    font-size: 0.9rem;
+    padding: 0.7rem 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .baseball-header {
+    padding: 0.8rem;
+  }
+
+  .baseball-header h1 {
+    font-size: 1.1rem;
+  }
+
+  .game-info {
+    font-size: 0.8rem;
+  }
+
+  .remaining-attempts {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .baseball-panel {
+    padding: 0.6rem;
+  }
+
+  .guess-record {
+    max-height: 45vh;
+    min-height: 200px;
+  }
+
+  .chat-box {
+    max-height: 100px;
+  }
+
+  .baseball-game-input {
+    flex-direction: column;
+  }
+
+  .baseball-game-input input {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .baseball-game-input button {
+    width: 100%;
+  }
+}
+
+/* 게임 종료 모달 모바일 최적화 */
+@media (max-width: 768px) {
+  .result-modal {
+    width: 95%;
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  .result-modal h1 {
+    font-size: 1.5rem;
+  }
+
+  .result-modal p {
+    font-size: 1rem;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .modal-btn {
+    width: 100%;
+    padding: 1rem;
   }
 }

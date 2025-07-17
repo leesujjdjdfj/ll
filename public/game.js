@@ -18,6 +18,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const body = document.body
     const baseballGameScreen = document.getElementById("baseball-game-screen")
 
+    // 싱글모드 플래그 설정
+    const isSingleMode = true
+
+    // 헤더 텍스트 변경
+    const headerTitle = document.querySelector(".baseball-header h1")
+    if (headerTitle) {
+      headerTitle.textContent = "⚾ 숫자야구 싱글"
+    }
+
+    // 개발자 모드 플래그 (테스트용)
+    const isDevMode = false // 배포 시 false로 설정
+
     // 새로운 숫자야구 UI 요소들 (싱글모드용)
     const myNicknameBaseballDisplay = document.getElementById("my-nickname-display")
     const opponentNicknameBaseballDisplay = document.getElementById("opponent-nickname-display")
@@ -39,12 +51,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const baseballPlayAgain = document.getElementById("baseball-play-again")
 
     let computerSecretNumber = ""
-    let mySecretNumber = ""
     let attempts = 0
-    const gameDigits = Number.parseInt(urlParams.get("digits")) || 3
     let gameEnded = false
     let myScore = 0
-    let computerScore = 0
+    const computerScore = 0
+
+    // 자릿수에 따른 최대 턴 수 설정
+    const maxTurns = gameDigits === 3 ? 15 : gameDigits === 4 ? 25 : 50
+    let remainingTurns = maxTurns
 
     // 전역 함수로 toggleExpand 정의
     window.toggleExpand = (id) => {
@@ -63,11 +77,35 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeSinglePlayerUI()
 
     function initializeSinglePlayerUI() {
+      // 싱글 플레이어 클래스 추가
+      baseballGameScreen.classList.add("single-player")
+
+      // 컨텐츠 영역에도 싱글 플레이어 클래스 추가
+      const baseballContent = document.querySelector(".baseball-content")
+      if (baseballContent) {
+        baseballContent.classList.add("single-player")
+      }
+
+      // 상대 추측 기록 패널 완전히 제거
+      const panels = document.querySelectorAll(".baseball-panel")
+      if (panels.length >= 2) {
+        panels[1].remove() // 상대 추측 기록 패널 완전 삭제
+      }
+
+      // 내 비밀번호 표시 영역 숨기기
+      const statsSection = document.querySelector(".stats-section")
+      if (statsSection) {
+        statsSection.style.display = "none"
+      }
+
       // 플레이어 정보 설정
       myNicknameBaseballDisplay.textContent = nickname
-      opponentNicknameBaseballDisplay.textContent = "컴퓨터"
+      opponentNicknameBaseballDisplay.textContent = "도전 과제"
       myScoreBaseballDisplay.textContent = myScore
-      opponentScoreBaseballDisplay.textContent = computerScore
+      opponentScoreBaseballDisplay.textContent = "∞"
+
+      // 남은 횟수 표시 영역 추가
+      addRemainingAttemptsDisplay()
 
       // 게임 시작
       startNewSingleGame()
@@ -76,34 +114,64 @@ document.addEventListener("DOMContentLoaded", () => {
       setupSinglePlayerEvents()
     }
 
+    function addRemainingAttemptsDisplay() {
+      // 기존 게임 정보 영역에 남은 횟수 표시 추가
+      const gameInfo = document.querySelector(".game-info")
+      if (gameInfo) {
+        gameInfo.innerHTML = `
+      <span id="player-info">플레이어: <span id="my-nickname-display">${nickname}</span> vs <span id="opponent-nickname-display">도전 과제</span></span>
+      <span id="remaining-attempts" class="remaining-attempts">남은 시도: <span id="remaining-count">${remainingTurns}</span> / ${maxTurns}</span>
+    `
+      }
+    }
+
+    function updateRemainingAttempts() {
+      const remainingCountElement = document.getElementById("remaining-count")
+      if (remainingCountElement) {
+        remainingCountElement.textContent = remainingTurns
+
+        // 남은 횟수에 따른 색상 변경
+        const remainingAttemptsElement = document.getElementById("remaining-attempts")
+        if (remainingAttemptsElement) {
+          if (remainingTurns <= 3) {
+            remainingAttemptsElement.classList.add("danger")
+          } else if (remainingTurns <= 7) {
+            remainingAttemptsElement.classList.add("warning")
+          } else {
+            remainingAttemptsElement.classList.remove("danger", "warning")
+          }
+        }
+      }
+    }
+
     function startNewSingleGame() {
       // 컴퓨터의 비밀 숫자 생성 (중복 없이)
       generateComputerSecret()
 
-      // 내 비밀 숫자 생성 (싱글모드에서는 자동 생성)
-      generateMySecret()
-
       // UI 초기화
       myGuessesBaseball.innerHTML = ""
-      opponentGuessesBaseball.innerHTML = ""
       baseballChatBox.innerHTML = ""
 
       // 게임 상태 초기화
       attempts = 0
       gameEnded = false
+      remainingTurns = maxTurns
+
+      // 남은 횟수 UI 업데이트
+      updateRemainingAttempts()
 
       // 입력 활성화
       baseballGuessInput.disabled = false
       baseballGuessButton.disabled = false
       baseballGuessInput.value = ""
 
-      // 비밀번호 표시
-      mySecretBaseballDisplay.textContent = mySecretNumber
-
       // 시작 메시지
-      addSystemMessage("게임이 시작되었습니다! 컴퓨터의 3자리 숫자를 맞춰보세요.")
+      addSystemMessage(`🔇 게임이 시작되었습니다! 컴퓨터의 ${gameDigits}자리 숫자를 맞춰보세요.`)
 
-      console.log(`[디버그] 컴퓨터 비밀숫자: ${computerSecretNumber}`)
+      // 개발자 모드에서만 정답 출력
+      if (isDevMode) {
+        console.log(`[개발자 모드] 컴퓨터 정답: ${computerSecretNumber}`)
+      }
     }
 
     function generateComputerSecret() {
@@ -113,16 +181,6 @@ document.addEventListener("DOMContentLoaded", () => {
       for (let i = 0; i < gameDigits; i++) {
         const randomIndex = Math.floor(Math.random() * numbers.length)
         computerSecretNumber += numbers.splice(randomIndex, 1)[0]
-      }
-    }
-
-    function generateMySecret() {
-      const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-      mySecretNumber = ""
-
-      for (let i = 0; i < gameDigits; i++) {
-        const randomIndex = Math.floor(Math.random() * numbers.length)
-        mySecretNumber += numbers.splice(randomIndex, 1)[0]
       }
     }
 
@@ -179,6 +237,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       attempts++
+      remainingTurns--
+
+      // 남은 횟수 UI 업데이트
+      updateRemainingAttempts()
 
       // 결과 계산
       const result = calculateResult(computerSecretNumber, guess)
@@ -193,57 +255,16 @@ document.addEventListener("DOMContentLoaded", () => {
         myScoreBaseballDisplay.textContent = myScore
         addSystemMessage(`🎉 정답을 맞췄습니다! ${attempts}번 만에 성공!`)
         endGame(true, `축하합니다! ${attempts}번 만에 정답을 맞췄습니다!`)
+      } else if (remainingTurns <= 0) {
+        // 턴 소진으로 패배
+        addSystemMessage("기회를 모두 사용했습니다...")
+        endGame(false, "삐빅 바보입니다")
       } else {
-        // 컴퓨터 턴 시뮬레이션
-        setTimeout(() => {
-          simulateComputerGuess()
-        }, 1000)
+        // 게임 계속
+        addSystemMessage(`남은 기회: ${remainingTurns}번`)
       }
 
       baseballGuessInput.value = ""
-    }
-
-    function simulateComputerGuess() {
-      if (gameEnded) return
-
-      // 컴퓨터의 추측 생성 (간단한 AI)
-      const computerGuess = generateComputerGuess()
-      const result = calculateResult(mySecretNumber, computerGuess)
-      const isSuccess = result.strikes === gameDigits
-
-      // 상대 추측 기록에 추가
-      const computerAttempts = opponentGuessesBaseball.children.length + 1
-      addGuessToRecord(
-        opponentGuessesBaseball,
-        computerAttempts,
-        computerGuess,
-        `${result.strikes}S ${result.balls}B`,
-        isSuccess,
-        false,
-      )
-
-      if (isSuccess) {
-        // 컴퓨터 승리
-        computerScore++
-        opponentScoreBaseballDisplay.textContent = computerScore
-        addSystemMessage("컴퓨터가 정답을 맞췄습니다!")
-        endGame(false, "컴퓨터가 먼저 정답을 맞췄습니다.")
-      } else {
-        addSystemMessage(`컴퓨터가 ${computerGuess}을(를) 추측했습니다. (${result.strikes}S ${result.balls}B)`)
-      }
-    }
-
-    function generateComputerGuess() {
-      // 간단한 컴퓨터 AI - 랜덤 추측
-      const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-      let guess = ""
-
-      for (let i = 0; i < gameDigits; i++) {
-        const randomIndex = Math.floor(Math.random() * numbers.length)
-        guess += numbers.splice(randomIndex, 1)[0]
-      }
-
-      return guess
     }
 
     function calculateResult(secret, guess) {
@@ -293,10 +314,19 @@ document.addEventListener("DOMContentLoaded", () => {
       baseballGuessInput.disabled = true
       baseballGuessButton.disabled = true
 
-      // 게임 종료 모달 표시
+      // 게임 종료 모달 표시 (싱글모드에서는 정답 숨김)
       baseballResultTitle.textContent = isWin ? "🎉 승리!" : "😢 패배"
       baseballResultMessage.textContent = message
-      baseballAnswerDisplay.textContent = computerSecretNumber
+
+      // 싱글모드에서는 정답을 표시하지 않음
+      baseballAnswerDisplay.textContent = "***"
+
+      // 정답 표시 영역을 완전히 숨김
+      const answerSection = baseballAnswerDisplay.parentElement
+      if (answerSection) {
+        answerSection.style.display = "none"
+      }
+
       baseballGameOverModal.classList.add("show")
 
       // 시각적 효과 적용
