@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>햄붱이의 게임 플랫폼</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 헤더 네비게이션 -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <h1>🎮 햄붱이의 게임</h1>
+            </div>
+            <div class="user-section">
+                <div id="guest-section">
+                    <button id="login-btn" class="btn btn-outline">로그인</button>
+                    <button id="register-btn" class="btn btn-primary">회원가입</button>
+                </div>
+                <div id="user-section" class="hidden">
+                    <div class="user-profile">
+                        <div class="user-avatar">👤</div>
+                        <span id="user-nickname">사용자</span>
+                        <button id="profile-btn" class="btn btn-small">프로필</button>
+                        <button id="logout-btn" class="btn btn-small btn-outline">로그아웃</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- 홈 화면 -->
+        <section id="home-screen" class="screen active">
+            <div class="hero-section">
+                <h2 class="hero-title">다양한 게임을 즐겨보세요!</h2>
+                <p class="hero-subtitle">친구와 함께 또는 혼자서도 재미있게</p>
+            </div>
+
+            <!-- 게임 선택 카드 -->
+            <div class="games-section">
+                <h3 class="section-title">게임 선택</h3>
+                <div class="game-cards">
+                    <div class="game-card" data-game="baseball">
+                        <div class="game-icon">⚾</div>
+                        <div class="game-content">
+                            <h4 class="game-title">숫자야구</h4>
+                            <p class="game-description">상대방의 숫자를 맞춰보세요!</p>
+                            <div class="game-stats">
+                                <span class="stat">👥 1-2명</span>
+                                <span class="stat">⏱️ 5-15분</span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <button class="btn btn-primary game-choice-btn" data-game="baseball">플레이</button>
+                        </div>
+                    </div>
+
+                    <div class="game-card" data-game="omok">
+                        <div class="game-icon">🕹️</div>
+                        <div class="game-content">
+                            <h4 class="game-title">오목</h4>
+                            <p class="game-description">5개를 먼저 연결하세요!</p>
+                            <div class="game-stats">
+                                <span class="stat">👥 2명</span>
+                                <span class="stat">⏱️ 10-30분</span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <button class="btn btn-primary game-choice-btn" data-game="omok">플레이</button>
+                        </div>
+                    </div>
+
+                    <div class="game-card disabled" data-game="chess">
+                        <div class="game-icon">♟️</div>
+                        <div class="game-content">
+                            <h4 class="game-title">체스</h4>
+                            <p class="game-description">전략적인 두뇌 게임</p>
+                            <div class="game-stats">
+                                <span class="stat">👥 2명</span>
+                                <span class="stat">⏱️ 30-60분</span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <button class="btn btn-disabled" disabled>개발중</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 최근 게임 기록 (로그인 시에만 표시) -->
+            <div id="recent-games-section" class="recent-games-section hidden">
+                <h3 class="section-title">최근 게임 기록</h3>
+                <div class="recent-games-list" id="recent-games-list">
+                    <!-- 동적으로 생성 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 게임 규칙 화면 -->
+        <section id="rules-screen" class="screen">
+            <div class="content-header">
+                <h2>게임 규칙</h2>
+            </div>
+            <div class="rules-content">
+                <div class="rule-card">
+                    <h3>⚾ 숫자야구</h3>
+                    <div class="rule-details">
+                        <h4>게임 방법:</h4>
+                        <ul>
+                            <li>3~5자리의 서로 다른 숫자를 정합니다</li>
+                            <li>상대방의 숫자를 추측합니다</li>
+                            <li>자리와 숫자가 모두 맞으면 <strong>스트라이크(S)</strong></li>
+                            <li>숫자는 맞지만 자리가 틀리면 <strong>볼(B)</strong></li>
+                            <li>먼저 상대방의 숫자를 맞추는 사람이 승리!</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="rule-card">
+                    <h3>🕹️ 오목</h3>
+                    <div class="rule-details">
+                        <h4>게임 방법:</h4>
+                        <ul>
+                            <li>15×15 바둑판에서 진행합니다</li>
+                            <li>흑돌이 먼저 시작합니다</li>
+                            <li>가로, 세로, 대각선으로 5개를 먼저 연결하면 승리</li>
+                            <li>6개 이상 연결하면 무효입니다</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 공지사항 화면 -->
+        <section id="notice-screen" class="screen">
+            <div class="content-header">
+                <h2>공지사항</h2>
+            </div>
+            <div class="notice-content">
+                <div class="notice-item">
+                    <div class="notice-header">
+                        <h3>🎉 햄붱이의 게임 플랫폼 오픈!</h3>
+                        <span class="notice-date">2024.01.15</span>
+                    </div>
+                    <div class="notice-body">
+                        <p>안녕하세요! 햄붱이의 게임 플랫폼이 정식 오픈했습니다.</p>
+                        <p>현재 숫자야구와 오목을 즐기실 수 있으며, 체스는 곧 추가될 예정입니다.</p>
+                    </div>
+                </div>
+                <div class="notice-item">
+                    <div class="notice-header">
+                        <h3>🔧 서버 점검 안내</h3>
+                        <span class="notice-date">2024.01.10</span>
+                    </div>
+                    <div class="notice-body">
+                        <p>더 나은 서비스 제공을 위해 정기 점검을 실시합니다.</p>
+                        <p>점검 시간: 매주 화요일 오전 2:00 ~ 4:00</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 자유게시판 화면 -->
+        <section id="board-screen" class="screen">
+            <div class="content-header">
+                <h2>자유게시판</h2>
+                <button class="btn btn-primary" id="write-post-btn">글쓰기</button>
+            </div>
+            <div class="board-content">
+                <div class="board-item">
+                    <div class="board-header">
+                        <h3>숫자야구 고수되는 팁 공유</h3>
+                        <div class="board-meta">
+                            <span class="author">게임마스터</span>
+                            <span class="date">2024.01.14</span>
+                            <span class="views">👁️ 42</span>
+                        </div>
+                    </div>
+                    <div class="board-preview">
+                        숫자야구에서 승률을 높이는 전략을 공유합니다...
+                    </div>
+                </div>
+                <div class="board-item">
+                    <div class="board-header">
+                        <h3>오목 대회 개최 제안</h3>
+                        <div class="board-meta">
+                            <span class="author">오목왕</span>
+                            <span class="date">2024.01.13</span>
+                            <span class="views">👁️ 28</span>
+                        </div>
+                    </div>
+                    <div class="board-preview">
+                        정기적인 오목 대회를 개최하면 어떨까요?...
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 모달들 -->
+    <!-- 게임 모드 선택 모달 -->
+    <div id="mode-selection-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚾ 숫자야구 플레이 모드</h3>
+                <button class="modal-close" id="modal-close-btn">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="mode-options">
+                    <div class="mode-card" id="single-player-option">
+                        <div class="mode-icon">🤖</div>
+                        <h4>혼자하기</h4>
+                        <p>컴퓨터와 대결하세요</p>
+                        <button class="btn btn-primary" id="single-player-btn">시작하기</button>
+                    </div>
+                    <div class="mode-card" id="multi-player-option">
+                        <div class="mode-icon">👥</div>
+                        <h4>같이하기</h4>
+                        <p>친구와 함께 플레이</p>
+                        <button class="btn btn-primary" id="multi-player-btn">시작하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 로그인 모달 -->
+    <div id="login-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>로그인</h3>
+                <button class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="login-form">
+                    <div class="form-group">
+                        <label>아이디</label>
+                        <input type="text" id="login-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>비밀번호</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">로그인</button>
+                    </div>
+                </form>
+                <div class="guest-login-section">
+                    <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #eee;">
+                    <button type="button" class="btn btn-outline guest-login-btn" id="guest-login-btn">게스트로 로그인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 회원가입 모달 -->
+    <div id="register-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>회원가입</h3>
+                <button class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="register-form">
+                    <div class="form-group">
+                        <label>아이디</label>
+                        <input type="text" id="register-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>비밀번호</label>
+                        <input type="password" id="register-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>비밀번호 확인</label>
+                        <input type="password" id="register-password-confirm" required>
+                    </div>
+                    <div class="form-group">
+                        <label>닉네임</label>
+                        <input type="text" id="register-nickname" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">회원가입</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 프로필 모달 -->
+    <div id="profile-modal" class="modal-overlay hidden">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h3>프로필 & 게임 통계</h3>
+                <button class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- 프로필 정보 섹션 -->
+                <div class="profile-section">
+                    <div class="profile-header">
+                        <div class="profile-avatar-large">
+                            <img id="profile-image" src="/placeholder.svg?height=80&width=80" alt="프로필 이미지">
+                            <button class="avatar-edit-btn" id="change-avatar-btn">📷</button>
+                        </div>
+                        <div class="profile-info-main">
+                            <div class="nickname-display">
+                                <h3 id="profile-nickname-display">사용자</h3>
+                                <button class="btn btn-small btn-outline" id="edit-nickname-btn">닉네임 변경</button>
+                            </div>
+                            <div class="nickname-edit hidden" id="nickname-edit-section">
+                                <input type="text" id="new-nickname-input" placeholder="새 닉네임 입력">
+                                <button class="btn btn-small btn-primary" id="save-nickname-btn">저장</button>
+                                <button class="btn btn-small btn-outline" id="cancel-nickname-btn">취소</button>
+                            </div>
+                            <div class="profile-meta">
+                                <span class="user-level">레벨 <span id="user-level">1</span></span>
+                                <span class="user-type" id="user-type-badge">게스트</span>
+                                <span class="join-date">가입일: <span id="profile-join-date">2024.01.01</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 게임 통계 탭 -->
+                <div class="stats-section">
+                    <div class="stats-tabs">
+                        <button class="stats-tab active" data-game="overall">전체</button>
+                        <button class="stats-tab" data-game="baseball">⚾ 숫자야구</button>
+                        <button class="stats-tab" data-game="omok">🕹️ 오목</button>
+                        <button class="stats-tab" data-game="chess">♟️ 체스</button>
+                    </div>
+
+                    <!-- 전체 통계 -->
+                    <div class="stats-content active" id="overall-stats">
+                        <div class="stats-overview">
+                            <div class="stat-card">
+                                <div class="stat-icon">🎮</div>
+                                <div class="stat-info">
+                                    <div class="stat-value" id="total-games">0</div>
+                                    <div class="stat-label">총 게임</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">🏆</div>
+                                <div class="stat-info">
+                                    <div class="stat-value" id="total-wins">0</div>
+                                    <div class="stat-label">총 승리</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">📊</div>
+                                <div class="stat-info">
+                                    <div class="stat-value" id="overall-winrate">0%</div>
+                                    <div class="stat-label">전체 승률</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">⏱️</div>
+                                <div class="stat-info">
+                                    <div class="stat-value" id="total-playtime">0h</div>
+                                    <div class="stat-label">플레이 시간</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 숫자야구 통계 -->
+                    <div class="stats-content" id="baseball-stats">
+                        <div class="game-stats-header">
+                            <h4>⚾ 숫자야구 통계</h4>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value" id="baseball-games">0</div>
+                                <div class="stat-label">총 게임</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="baseball-wins">0</div>
+                                <div class="stat-label">승리</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="baseball-losses">0</div>
+                                <div class="stat-label">패배</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="baseball-winrate">0%</div>
+                                <div class="stat-label">승률</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="baseball-avg-attempts">0</div>
+                                <div class="stat-label">평균 시도</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="baseball-best-score">-</div>
+                                <div class="stat-label">최고 기록</div>
+                            </div>
+                        </div>
+                        <div class="recent-games">
+                            <h5>최근 경기 기록</h5>
+                            <div class="recent-games-list" id="baseball-recent-games">
+                                <!-- 동적으로 생성 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 오목 통계 -->
+                    <div class="stats-content" id="omok-stats">
+                        <div class="game-stats-header">
+                            <h4>🕹️ 오목 통계</h4>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value" id="omok-games">0</div>
+                                <div class="stat-label">총 게임</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="omok-wins">0</div>
+                                <div class="stat-label">승리</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="omok-losses">0</div>
+                                <div class="stat-label">패배</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="omok-draws">0</div>
+                                <div class="stat-label">무승부</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="omok-winrate">0%</div>
+                                <div class="stat-label">승률</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="omok-avg-moves">0</div>
+                                <div class="stat-label">평균 수</div>
+                            </div>
+                        </div>
+                        <div class="recent-games">
+                            <h5>최근 경기 기록</h5>
+                            <div class="recent-games-list" id="omok-recent-games">
+                                <!-- 동적으로 생성 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 체스 통계 -->
+                    <div class="stats-content" id="chess-stats">
+                        <div class="game-stats-header">
+                            <h4>♟️ 체스 통계</h4>
+                            <span class="coming-soon">개발 예정</span>
+                        </div>
+                        <div class="stats-placeholder">
+                            <p>체스 게임이 출시되면 통계를 확인할 수 있습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 닉네임 입력 모달 (게스트용) -->
+    <div id="nickname-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>닉네임 설정</h3>
+            </div>
+            <div class="modal-body">
+                <div class="nickname-setup">
+                    <p>게임에서 사용할 닉네임을 입력해주세요.</p>
+                    <div class="form-group">
+                        <input type="text" id="guest-nickname-input" placeholder="닉네임 입력 (2-10글자)" maxlength="10">
+                        <div class="nickname-validation" id="guest-nickname-validation"></div>
+                    </div>
+                    <div class="nickname-tips">
+                        <h5>닉네임 규칙:</h5>
+                        <ul>
+                            <li>2-10글자 사이</li>
+                            <li>한글, 영문, 숫자, 언더스코어(_) 사용 가능</li>
+                            <li>게스트는 중복 닉네임 허용</li>
+                        </ul>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" id="confirm-nickname-btn" disabled>확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="home.js"></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게임 플레이</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="setup-screen" class="hidden">
+            <h2 id="setup-title"></h2>
+            <div id="baseball-options" class="hidden">
+                <select id="digits-select">
+                    <option value="3">3자리</option>
+                    <option value="4">4자리</option>
+                    <option value="5">5자리</option>
+                </select>
+            </div>
+            <div id="room-actions">
+                <button id="create-room-button">새로운 방 만들기</button>
+            </div>
+            <div id="join-actions">
+                <input type="text" id="room-code-input" placeholder="받은 방 코드를 입력하세요">
+                <button id="join-room-button">참가하기</button>
+            </div>
+            <div id="room-info" class="hidden">
+                <p>방이 만들어졌습니다! 아래 코드를 친구에게 공유하세요.</p>
+                <strong id="room-code-display"></strong>
+            </div>
+             <a href="/" class="back-to-home">← 홈으로 돌아가기</a>
+        </div>
+
+        <div id="set-number-screen" class="hidden">
+            <h2>비밀 숫자 정하기</h2>
+            <p id="set-number-info"></p>
+            <input type="text" id="secret-number-input" placeholder="비밀 숫자 입력 (중복 없이)">
+            <button id="set-number-button">확인</button>
+        </div>
+
+        <div id="single-player-screen" class="hidden">
+            <h2>숫자야구 (혼자하기)</h2>
+            
+            <div id="single-player-setup">
+                <p>플레이할 숫자의 자릿수를 선택하세요.</p>
+                <select id="single-digits-select">
+                    <option value="3">3자리</option>
+                    <option value="4">4자리</option>
+                    <option value="5">5자리</option>
+                </select>
+                <button id="single-start-button">게임 시작</button>
+            </div>
+
+            <div id="single-player-board" class="hidden">
+                <p id="single-info-text"></p>
+                <div id="single-log-area">
+                    <h4>나의 추측 기록</h4>
+                    <ul id="single-guesses-list"></ul>
+                </div>
+                <div id="single-input-area">
+                    <input type="text" id="single-guess-input" placeholder="숫자 추측">
+                    <button id="single-guess-button">추측하기</button>
+                </div>
+                <div id="single-game-over-actions" class="hidden">
+                    <button id="play-again-single-button">새 게임 시작</button>
+                    <a href="/" class="back-to-home">홈으로 돌아가기</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 새로운 숫자야구 UI -->
+        <div id="baseball-game-screen" class="hidden baseball-ui">
+            <header class="baseball-header">
+                <h1>⚾ 숫자야구 멀티</h1>
+                <div class="game-info">
+                    <span id="player-info">플레이어: <span id="my-nickname-display">Player 1</span> vs <span id="opponent-nickname-display">Player 2</span></span>
+                    <span id="score-info">점수: <span id="my-score-display">0</span> - <span id="opponent-score-display">0</span></span>
+                </div>
+            </header>
+            
+            <div class="baseball-main">
+                <div class="baseball-content">
+                    <div class="baseball-panel">
+                        <div class="stats-section">
+                            <div class="secret-number-info">
+                                내 비밀번호: <span id="my-secret-display">***</span>
+                            </div>
+                        </div>
+                        <h2>내 추측 기록</h2>
+                        <div id="my-guesses-baseball" class="guess-record"></div>
+                        <button class="expand-btn" onclick="toggleExpand('my-guesses-baseball')">전체 보기</button>
+                        
+                        <h2 style="margin-top:1rem;">상대 추측 기록</h2>
+                        <div id="opponent-guesses-baseball" class="guess-record"></div>
+                        <button class="expand-btn" onclick="toggleExpand('opponent-guesses-baseball')">전체 보기</button>
+                    </div>
+                    
+                    <div class="baseball-panel">
+                        <h2>실시간 채팅</h2>
+                        <div class="chat-box" id="baseball-chat-box"></div>
+                        <div class="chat-input">
+                            <input type="text" id="baseball-chat-input" placeholder="메시지를 입력하세요">
+                            <button id="baseball-chat-send">전송</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="baseball-game-input">
+                    <input type="text" id="baseball-guess-input" placeholder="숫자를 입력하세요" disabled>
+                    <button id="baseball-guess-button" disabled>입력</button>
+                    <button id="baseball-surrender-button">게임 종료</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 기존 오목 게임 화면 -->
+        <div id="game-play-screen" class="hidden">
+            <div id="main-content">
+                <div id="game-board-area">
+                    </div>
+                <div id="side-panel">
+                    <h2 id="game-title"></h2>
+                    <div id="scoreboard">
+                        <h3>스코어</h3>
+                        <p>
+                            <span id="my-nickname">Player 1</span>: <span id="my-score">0</span>
+                             vs 
+                            <span id="opponent-nickname">Player 2</span>: <span id="opponent-score">0</span>
+                        </p>
+                    </div>
+                     <div id="my-secret-number-display" class="hidden">
+                        나의 비밀숫자: <span id="my-secret-number"></span>
+                    </div>
+                    <div id="info-text-area">
+                        <p id="info-text"></p>
+                    </div>
+                    <div id="chat-area">
+                        <h3>채팅</h3>
+                        <div id="chat-messages"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="input-area">
+                </div>
+             <div id="game-over-actions" class="hidden">
+                <button id="play-again-button">다시하기</button>
+                <a href="/" class="back-to-home">홈으로 돌아가기</a>
+            </div>
+        </div>
+        <div id="status-text"></div>
+    </div>
+
+    <!-- 게임 종료 모달 -->
+    <div class="overlay" id="baseball-game-over-modal">
+        <div class="result-modal">
+            <h1 id="baseball-result-title">🎉 게임 종료!</h1>
+            <p id="baseball-result-message">결과 메시지</p>
+            <p>상대 정답: <strong id="baseball-answer-display">***</strong></p>
+            <div class="modal-actions">
+                <button id="baseball-play-again" class="modal-btn primary">다시하기</button>
+                <a href="/" class="modal-btn secondary">홈으로</a>
+            </div>
+        </div>
+    </div>
+
+    <audio id="stone-sound" src="stone.mp3"></audio>
+    <audio id="bgm-sound" src="bgm.mp3" loop></audio>
+    <script src="game.js"></script>
+</body>
+</html>

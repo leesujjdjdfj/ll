@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>숫자야구 설정 - 햄붱이의 게임</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="baseball-setup-body">
+    <!-- 헤더 -->
+    <header class="setup-header">
+        <div class="setup-header-container">
+            <div class="setup-logo">
+                <a href="/" class="logo-link">
+                    <h1>🎮 햄붱이의 게임</h1>
+                </a>
+            </div>
+            <div class="setup-user-info">
+                <div class="user-profile-mini">
+                    <div class="user-avatar-mini">👤</div>
+                    <span id="setup-user-nickname">사용자</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨테이너 -->
+    <main class="setup-main">
+        <div class="setup-container">
+            <!-- 게임 소개 섹션 -->
+            <div class="game-intro-section">
+                <div class="game-intro-header">
+                    <div class="game-icon-large">⚾</div>
+                    <div class="game-intro-content">
+                        <h1 class="game-title">숫자야구 설정</h1>
+                        <p class="game-description">숫자를 맞추는 심리전 게임! 상대방보다 먼저 정답을 찾아보세요.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 설정 섹션 -->
+            <div class="setup-section">
+                <!-- 자릿수 설정 -->
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <h3 class="setting-title">🔢 자릿수 설정</h3>
+                        <p class="setting-subtitle">게임에서 사용할 숫자의 자릿수를 선택하세요</p>
+                    </div>
+                    <div class="digits-options">
+                        <label class="digit-option active" data-digits="3">
+                            <input type="radio" name="digits" value="3" checked>
+                            <div class="digit-card">
+                                <div class="digit-number">3</div>
+                                <div class="digit-label">자리</div>
+                                <div class="digit-desc">빠른 게임</div>
+                            </div>
+                        </label>
+                        <label class="digit-option" data-digits="4">
+                            <input type="radio" name="digits" value="4">
+                            <div class="digit-card">
+                                <div class="digit-number">4</div>
+                                <div class="digit-label">자리</div>
+                                <div class="digit-desc">표준 게임</div>
+                            </div>
+                        </label>
+                        <label class="digit-option" data-digits="5">
+                            <input type="radio" name="digits" value="5">
+                            <div class="digit-card">
+                                <div class="digit-number">5</div>
+                                <div class="digit-label">자리</div>
+                                <div class="digit-desc">도전 게임</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 모드 선택 -->
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <h3 class="setting-title">🎯 게임 모드 선택</h3>
+                        <p class="setting-subtitle">원하는 게임 방식을 선택하세요</p>
+                    </div>
+                    <div class="mode-options">
+                        <div class="mode-card" id="single-mode-card">
+                            <div class="mode-icon">🤖</div>
+                            <div class="mode-content">
+                                <h4 class="mode-title">혼자하기</h4>
+                                <p class="mode-description">컴퓨터와 대결하며 실력을 키워보세요</p>
+                                <div class="mode-features">
+                                    <span class="feature-tag">⚡ 즉시 시작</span>
+                                    <span class="feature-tag">🎯 연습 모드</span>
+                                </div>
+                            </div>
+                            <button class="mode-button" id="single-mode-button">
+                                <span>시작하기</span>
+                                <div class="button-arrow">→</div>
+                            </button>
+                        </div>
+
+                        <div class="mode-card" id="multi-mode-card">
+                            <div class="mode-icon">👥</div>
+                            <div class="mode-content">
+                                <h4 class="mode-title">같이하기</h4>
+                                <p class="mode-description">친구와 함께 실시간으로 대결해보세요</p>
+                                <div class="mode-features">
+                                    <span class="feature-tag">🔥 실시간 대전</span>
+                                    <span class="feature-tag">💬 채팅 지원</span>
+                                </div>
+                            </div>
+                            <button class="mode-button" id="multi-mode-button">
+                                <span>방 설정</span>
+                                <div class="button-arrow">→</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 멀티플레이 옵션 (처음에는 숨김) -->
+                <div class="setting-card hidden" id="multi-options-card">
+                    <div class="setting-header">
+                        <h3 class="setting-title">🏠 멀티플레이 설정</h3>
+                        <p class="setting-subtitle">방을 만들거나 기존 방에 참가하세요</p>
+                    </div>
+                    <div class="multi-options">
+                        <div class="multi-option-card" id="create-room-card">
+                            <div class="multi-option-icon">🛠️</div>
+                            <div class="multi-option-content">
+                                <h4 class="multi-option-title">방 만들기</h4>
+                                <p class="multi-option-desc">새로운 방을 만들고 친구를 초대하세요</p>
+                            </div>
+                            <button class="multi-option-button" id="create-room-btn">
+                                방 만들기
+                            </button>
+                        </div>
+
+                        <div class="multi-option-card" id="join-room-card">
+                            <div class="multi-option-icon">🔑</div>
+                            <div class="multi-option-content">
+                                <h4 class="multi-option-title">방 참가하기</h4>
+                                <p class="multi-option-desc">친구가 공유한 방 코드로 참가하세요</p>
+                            </div>
+                            <div class="join-room-input">
+                                <input type="text" id="room-code-input" placeholder="방 코드 입력 (예: 1234)" maxlength="4">
+                                <button class="multi-option-button" id="join-room-btn">
+                                    참가하기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 방 생성 완료 (처음에는 숨김) -->
+                <div class="setting-card hidden" id="room-created-card">
+                    <div class="setting-header">
+                        <h3 class="setting-title">✅ 방 생성 완료</h3>
+                        <p class="setting-subtitle">아래 코드를 친구에게 공유하세요</p>
+                    </div>
+                    <div class="room-code-display">
+                        <div class="room-code-container">
+                            <div class="room-code-label">방 코드</div>
+                            <div class="room-code-value" id="generated-room-code">1234</div>
+                            <button class="copy-button" id="copy-room-code">
+                                📋 복사
+                            </button>
+                        </div>
+                        <div class="waiting-message">
+                            <div class="loading-spinner"></div>
+                            <span>친구가 참가하기를 기다리는 중...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 하단 네비게이션 -->
+            <div class="setup-footer">
+                <a href="/" class="back-button">
+                    <span class="back-arrow">←</span>
+                    <span>홈으로 돌아가기</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script src="baseball-setup.js"></script>
+</body>
+</html>
